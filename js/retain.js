@@ -24,13 +24,14 @@ $(function(){
         // take input from the view and pass to the model to create a new note
         addNewNote: function(noteStr) {
             model.add({
-                content: noteStr
+                content: noteStr,
+                date: Date.now()
             });
             view.render();
         },
         // grab all the notes from the model (and give to the view)
         getNotes: function() {
-            return model.getAllNotes();
+            return model.getAllNotes().reverse();
         },
 
         // The Octopus needs to wake up the model first, then the view
@@ -60,6 +61,9 @@ $(function(){
             octopus.getNotes().forEach(function(note){
                 htmlStr += '<li class="note">'+
                         note.content +
+                        '<div id="note-date">' +
+                        new Date(note.date) +
+                        '</div>' +
                     '</li>';
             });
             this.noteList.html( htmlStr );
