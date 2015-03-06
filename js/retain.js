@@ -1,16 +1,19 @@
 $(function(){
 
     var model = {
+        // create a place to store our notes
         init: function() {
             if (!localStorage.notes) {
                 localStorage.notes = JSON.stringify([]);
             }
         },
+        // add a new note!
         add: function(obj) {
             var data = JSON.parse(localStorage.notes);
             data.push(obj);
             localStorage.notes = JSON.stringify(data);
         },
+        // return all the current notes (to the Octopus)
         getAllNotes: function() {
             return JSON.parse(localStorage.notes);
         }
@@ -18,17 +21,19 @@ $(function(){
 
 
     var octopus = {
+        // take input from the view and pass to the model to create a new note
         addNewNote: function(noteStr) {
             model.add({
                 content: noteStr
             });
             view.render();
         },
-
+        // grab all the notes from the model (and give to the view)
         getNotes: function() {
             return model.getAllNotes();
         },
 
+        // The Octopus needs to wake up the model first, then the view
         init: function() {
             model.init();
             view.init();
@@ -37,6 +42,7 @@ $(function(){
 
 
     var view = {
+        // connect js view code to html elements, define new ones and render the initial view
         init: function() {
             this.noteList = $('#notes');
             var newNoteForm = $('#new-note-form');
@@ -48,6 +54,7 @@ $(function(){
             });
             view.render();
         },
+        // read notes from the octopus and render them on the page
         render: function(){
             var htmlStr = '';
             octopus.getNotes().forEach(function(note){
@@ -59,5 +66,6 @@ $(function(){
         }
     };
 
+    // start here with the Octopus. Wake him up!
     octopus.init();
 });
